@@ -1,0 +1,12 @@
+{
+  "model": "Random Forest (max_depth=4, n_estimators=200)",
+  "split": "client-grouped, test_size=0.3",
+  "precision_at_50_grouped": 0.64,
+  "baseline_precision_at_50": 0.3,
+  "base_rate": 0.351581,
+  "reason_code_thresholds": {
+    "near_zero_ctr": "ctr < 0.001",
+    "weak_absolute_position": "position_first_half > 10"
+  },
+  "queue_size": 50
+}
