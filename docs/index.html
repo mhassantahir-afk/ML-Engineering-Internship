@@ -1,0 +1,1030 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Which Pages Need a Review First? — Muhammad Hassan Tahir, FlyRank ML Internship</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&family=Public+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #FFFFFF;
+    --bg-alt: #EFF4F3;
+    --ink: #14181B;
+    --muted: #5B6670;
+    --line: #DCE3E1;
+    --accent: #146356;
+    --accent-bright: #1F8F79;
+    --accent-soft: #E1EFEC;
+    --decline: #A6453B;
+    --decline-soft: #F7EAE8;
+    --sans: "Public Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    --serif: "Source Serif 4", Georgia, "Times New Roman", serif;
+    --mono: "IBM Plex Mono", "SF Mono", Menlo, Consolas, monospace;
+  }
+
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--serif);
+    font-size: 18px;
+    line-height: 1.65;
+  }
+
+  .container {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+  }
+
+  .container-wide {
+    max-width: 920px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+  }
+
+  /* ---------- Hero ---------- */
+
+  .hero {
+    padding: 5.5rem 0 3rem;
+    text-align: center;
+  }
+
+  .hero h1 {
+    font-family: var(--sans);
+    font-size: 2.35rem;
+    font-weight: 700;
+    line-height: 1.28;
+    letter-spacing: -0.015em;
+    margin: 0 auto 1.5rem;
+    max-width: 720px;
+    color: var(--ink);
+  }
+
+  .byline {
+    font-family: var(--sans);
+    font-size: 1.05rem;
+    margin-bottom: 0.4rem;
+  }
+
+  .byline a { color: var(--accent); text-decoration: none; border-bottom: 1px solid transparent; }
+  .byline a:hover { border-bottom-color: var(--accent); }
+
+  .affiliation {
+    font-family: var(--sans);
+    font-size: 0.95rem;
+    color: var(--muted);
+    margin-bottom: 2.25rem;
+  }
+
+  .link-row {
+    display: flex;
+    justify-content: center;
+    gap: 0.7rem;
+    flex-wrap: wrap;
+  }
+
+  .pill {
+    font-family: var(--sans);
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #fff;
+    background: var(--ink);
+    padding: 0.55rem 1.3rem;
+    border-radius: 999px;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    transition: background 0.15s ease;
+  }
+  .pill:hover { background: var(--accent); }
+  .pill.outline {
+    color: var(--ink);
+    background: transparent;
+    border: 1px solid var(--line);
+  }
+  .pill.outline:hover { background: var(--bg-alt); color: var(--ink); }
+
+  /* ---------- Teaser: precision comparison ---------- */
+
+  .teaser {
+    padding: 0 0 4rem;
+  }
+
+  .teaser-card {
+    max-width: 620px;
+    margin: 0 auto;
+    background: var(--bg-alt);
+    border-radius: 10px;
+    padding: 2rem 2.25rem 1.75rem;
+  }
+
+  .teaser-label {
+    font-family: var(--sans);
+    font-size: 0.85rem;
+    color: var(--muted);
+    margin-bottom: 1.4rem;
+    text-align: left;
+  }
+
+  .bar-row {
+    display: grid;
+    grid-template-columns: 132px 1fr 52px;
+    align-items: center;
+    gap: 0.9rem;
+    margin-bottom: 0.9rem;
+    font-family: var(--sans);
+  }
+
+  .bar-row:last-child { margin-bottom: 0; }
+
+  .bar-name {
+    font-size: 0.85rem;
+    color: var(--ink);
+    text-align: right;
+  }
+
+  .bar-track {
+    background: #DCE7E4;
+    border-radius: 5px;
+    height: 15px;
+    overflow: hidden;
+  }
+
+  .bar-fill {
+    height: 100%;
+    border-radius: 5px;
+    background: var(--muted);
+  }
+
+  .bar-fill.rf { background: var(--accent-bright); }
+  .bar-fill.dt { background: var(--accent); }
+  .bar-fill.rule { background: var(--decline); }
+
+  .bar-value {
+    font-size: 0.85rem;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .teaser-note {
+    font-family: var(--sans);
+    font-size: 0.82rem;
+    color: var(--muted);
+    text-align: left;
+    margin-top: 1.4rem;
+    padding-top: 1.1rem;
+    border-top: 1px solid #D6E2DF;
+  }
+
+  /* ---------- Bands ---------- */
+
+  .band { padding: 3.75rem 0; }
+  .band-alt { background: var(--bg-alt); }
+
+  .band h2 {
+    font-family: var(--sans);
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin: 0 0 1.4rem;
+    letter-spacing: -0.01em;
+  }
+
+  .band h3 {
+    font-family: var(--sans);
+    font-size: 1.05rem;
+    font-weight: 600;
+    margin: 2rem 0 0.8rem;
+  }
+
+  .band p { margin: 0 0 1.15rem; }
+  .band ul, .band ol { padding-left: 1.3rem; margin: 0 0 1.15rem; }
+  .band li { margin-bottom: 0.55rem; }
+
+  .abstract-band p {
+    font-size: 1.03rem;
+  }
+
+  code {
+    font-family: var(--mono);
+    font-size: 0.85em;
+    background: var(--accent-soft);
+    padding: 0.1em 0.35em;
+    border-radius: 3px;
+  }
+
+  /* ---------- Math ---------- */
+
+  .math-wrap {
+    background: var(--bg-alt);
+    border-radius: 6px;
+    padding: 1.25rem 1.5rem;
+    margin: 1.25rem 0;
+    overflow-x: auto;
+  }
+
+  .math-block {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.45em;
+    font-family: var(--serif);
+    font-size: 1.03rem;
+    color: var(--ink);
+  }
+
+  .math-block + .math-block { margin-top: 1rem; }
+  .mvar { font-style: italic; }
+  .math-block sub { font-style: italic; font-size: 0.68em; }
+
+  .frac {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    vertical-align: middle;
+    margin: 0 0.15em;
+    font-style: italic;
+    line-height: 1.3;
+  }
+  .frac .num, .frac .den { padding: 0.05em 0.3em; white-space: nowrap; }
+  .frac .num { border-bottom: 1.5px solid currentColor; }
+
+  .piecewise-brace {
+    font-family: var(--serif);
+    font-size: 2.6em;
+    font-weight: 300;
+    line-height: 1;
+    display: inline-block;
+    transform: scaleY(1.55);
+    margin-right: 0.15em;
+    color: var(--muted);
+  }
+
+  .piecewise-cases { display: flex; flex-direction: column; gap: 0.5rem; font-size: 0.97rem; }
+  .case-row { display: flex; gap: 1.5rem; align-items: baseline; }
+  .case-val { font-style: italic; min-width: 3.4rem; }
+
+  /* ---------- Tables ---------- */
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: var(--sans);
+    font-size: 0.92rem;
+    margin: 1.4rem 0;
+  }
+  th, td { text-align: left; padding: 0.7rem 0.8rem; border-bottom: 1px solid var(--line); }
+  th { font-weight: 600; color: var(--muted); font-size: 0.8rem; text-transform: none; }
+  td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
+  .highlight-row td { font-weight: 700; color: var(--accent); background: var(--accent-soft); }
+  .highlight-row td:first-child { border-radius: 6px 0 0 6px; }
+  .highlight-row td:last-child { border-radius: 0 6px 6px 0; }
+
+  /* ---------- Figures (data visuals, no external images) ---------- */
+
+  figure { margin: 1.75rem 0; }
+  .fig-panel {
+    background: var(--bg-alt);
+    border-radius: 8px;
+    padding: 1.75rem;
+  }
+  figcaption {
+    font-family: var(--sans);
+    font-size: 0.85rem;
+    color: var(--muted);
+    margin-top: 0.75rem;
+    line-height: 1.5;
+  }
+
+  .split-compare { display: flex; gap: 2rem; font-family: var(--sans); flex-wrap: wrap; }
+  .split-col { flex: 1; min-width: 160px; }
+  .split-col-title { font-size: 0.8rem; color: var(--muted); margin-bottom: 0.6rem; }
+  .split-bar-row { display: flex; align-items: center; gap: 0.6rem; margin-bottom: 0.5rem; }
+  .split-bar-label { font-size: 0.78rem; width: 78px; text-align: right; color: var(--ink); }
+  .split-bar-track { flex: 1; background: #DCE7E4; border-radius: 4px; height: 12px; overflow: hidden; }
+  .split-bar-fill { height: 100%; border-radius: 4px; background: var(--accent-bright); }
+  .split-bar-val { font-size: 0.78rem; font-weight: 600; width: 34px; }
+
+  .curve-fig { font-family: var(--sans); }
+  .curve-legend { display: flex; gap: 1.4rem; font-size: 0.8rem; color: var(--muted); margin-bottom: 1rem; }
+  .curve-legend span { display: inline-flex; align-items: center; gap: 0.4rem; }
+  .swatch { width: 12px; height: 3px; display: inline-block; border-radius: 2px; }
+
+  /* ---------- Callouts ---------- */
+
+  .callout {
+    border-left: 3px solid var(--decline);
+    background: var(--decline-soft);
+    padding: 1.1rem 1.3rem;
+    border-radius: 3px;
+    font-size: 0.97rem;
+    margin: 1.4rem 0;
+  }
+
+  .callout-title {
+    font-family: var(--sans);
+    font-weight: 700;
+    font-size: 0.85rem;
+    color: var(--decline);
+    margin-bottom: 0.5rem;
+    letter-spacing: 0.01em;
+  }
+
+  .reason-code {
+    font-family: var(--mono);
+    font-weight: 500;
+    background: var(--accent-soft);
+    color: var(--accent);
+    padding: 0.1em 0.45em;
+    border-radius: 3px;
+    font-size: 0.85em;
+  }
+
+  /* ---------- Reproducibility / citation block ---------- */
+
+  .notebook-list {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 1.5rem;
+    font-family: var(--sans);
+    font-size: 0.92rem;
+  }
+  .notebook-list li {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 1rem;
+    padding: 0.7rem 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .notebook-list li:first-child { border-top: 1px solid var(--line); }
+  .notebook-name { color: var(--ink); }
+  .notebook-list a { color: var(--accent); text-decoration: none; font-family: var(--mono); font-size: 0.85rem; white-space: nowrap; }
+  .notebook-list a:hover { text-decoration: underline; }
+
+  .cite-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.9rem;
+  }
+  .cite-header h3 { margin: 0; }
+
+  .copy-btn {
+    font-family: var(--sans);
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--ink);
+    background: transparent;
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    padding: 0.4rem 0.8rem;
+    cursor: pointer;
+    transition: background 0.15s ease;
+  }
+  .copy-btn:hover { background: var(--bg-alt); }
+  .copy-btn.copied { color: var(--accent-bright); border-color: var(--accent-bright); }
+
+  pre.cite-block {
+    font-family: var(--mono);
+    font-size: 0.85rem;
+    line-height: 1.6;
+    background: var(--ink);
+    color: #EAF3F0;
+    padding: 1.25rem 1.4rem;
+    border-radius: 8px;
+    overflow-x: auto;
+    margin: 0;
+  }
+
+  .env-list {
+    font-family: var(--sans);
+    font-size: 0.92rem;
+    padding-left: 1.2rem;
+  }
+  .env-list li { margin-bottom: 0.5rem; }
+  .env-list a { color: var(--accent); }
+
+  /* ---------- Footer ---------- */
+
+  footer {
+    padding: 3rem 0 4rem;
+    text-align: center;
+    font-family: var(--sans);
+    font-size: 0.88rem;
+    color: var(--muted);
+  }
+  footer a { color: var(--accent); }
+
+  @media (max-width: 600px) {
+    body { font-size: 16.5px; }
+    .hero { padding: 3.5rem 0 2.5rem; }
+    .hero h1 { font-size: 1.7rem; }
+    .band { padding: 2.75rem 0; }
+    .band h2 { font-size: 1.25rem; }
+    table { font-size: 0.82rem; }
+    th, td { padding: 0.55rem 0.45rem; }
+    .bar-row { grid-template-columns: 90px 1fr 42px; }
+    .teaser-card { padding: 1.5rem 1.3rem; }
+    .notebook-list li { flex-direction: column; gap: 0.2rem; }
+  }
+</style>
+</head>
+<body>
+
+  <header class="hero">
+    <div class="container">
+      <h1>Which Pages Need a Review First? A Data-Driven Priority Queue Built from Search Performance Data</h1>
+      <div class="byline">Author: <a href="https://www.linkedin.com/in/hassan-t-4a9331351/">Muhammad Hassan Tahir</a></div>
+      <div class="affiliation">Data: FlyRank internship warehouse (March 2026 slice)</div>
+      <div class="link-row">
+        <a class="pill" href="https://github.com/mhassantahir-afk/ML-Engineering-Internship" target="_blank" rel="noopener">Repository</a>
+        <a class="pill outline" href="https://github.com/mhassantahir-afk/ML-Engineering-Internship/blob/main/work/notebooks" target="_blank" rel="noopener">Notebooks</a>
+        <a class="pill outline" href="https://huggingface.co/datasets/FlyRank/internship-warehouse" target="_blank" rel="noopener">Dataset &middot; FlyRank</a>
+      </div>
+    </div>
+  </header>
+
+  <section class="band band-alt abstract-band">
+    <div class="container">
+      <h2>Abstract</h2>
+      <p>
+        An SEO strategist or content writer working with hundreds or thousands of pages cannot
+        manually review each one; doing so costs an immense amount of time and money. This paper
+        builds a model that produces a ranked list of pages by their likelihood of declining
+        search performance. The model is trained on one month (March 2026) of FlyRank's
+        production search-performance warehouse data. A Random Forest model, evaluated on an
+        honest, client-grouped split, achieved a Precision@50 of 0.64, compared to a hand-written
+        baseline rule's 0.30 at a base rate of 0.352. This ranked queue lets a strategist or
+        writer narrow their review from thousands of pages down to the fifty most worth checking
+        first.
+      </p>
+    </div>
+  </section>
+
+  <section class="band">
+    <div class="container">
+      <h2>Introduction</h2>
+      <p>
+        SEO strategists and content writers manage hundreds or thousands of pages at a time.
+        Reviews of these pages are often driven by available data and simple heuristic rules.
+        Traditional, hand-written rules frequently fail in this regard. Manually auditing every
+        article each month is operationally impossible, and a flat threshold rule cannot capture
+        the patterns that actually separate a declining page from a healthy one.
+      </p>
+      <p>
+        This work trains and validates a machine-learning model that produces a ranked queue of
+        the 50 pages most likely to be declining, ordered by the model's confidence. An SEO
+        strategist or content writer can just check the list for the pages that have the highest
+        potential of declining and will be able to narrow down their review window from hundreds
+        or thousands of pages to a ranked queue of only 50 pages. 50 pages is a workload that fits
+        comfortably into a week of manual review.
+      </p>
+      <p>
+        A flat rule like <em class="mvar">high_volume &times; position_slipped &times; impressions</em>
+        fails here: the patterns separating declining pages from stable or growing ones are too
+        complex for a simple hand-written rule to capture reliably. A trained model is required to
+        learn these patterns directly from the data.
+      </p>
+      <p>
+        The label used to mark declining pages, <em class="mvar">declining_flag</em>, is calculated
+        from the change in impressions between the first and second halves of the month, using a
+        &minus;10% threshold.
+      </p>
+    </div>
+  </section>
+
+  <section class="band band-alt">
+    <div class="container">
+      <h2>Data</h2>
+
+      <h3>Data Source &amp; Partition Window</h3>
+      <p>
+        The analysis uses the FlyRank warehouse partition <code>fact_content_daily_performance</code>
+        for March 2026 (<code>month=2026-03</code>). The snapshot is divided into two 15-day
+        comparative periods:
+      </p>
+      <ul>
+        <li><strong>First Half (Baseline Window):</strong> March 1, 2026 &ndash; March 15, 2026</li>
+        <li><strong>Second Half (Target Window):</strong> March 16, 2026 &ndash; March 31, 2026</li>
+      </ul>
+
+      <h3>Dataset Size &amp; Filters</h3>
+      <p>
+        The pipeline processed <strong>139,747 distinct content&ndash;client pairs</strong> meeting
+        the following criteria:
+      </p>
+      <ul>
+        <li><strong>Included:</strong> pages with active Google Search Console tracking
+          (<code>gsc_data_available IS TRUE</code>), non-zero baseline impressions
+          (<code>first_half impressions &gt; 0</code>), and valid position tracking in both time
+          windows (<code>position_first_half</code> and <code>position_second_half</code> present).</li>
+        <li><strong>Excluded:</strong> unmonitored pages (<code>gsc_data_available IS FALSE</code>),
+          zero-baseline-impression records, and incomplete telemetry.</li>
+      </ul>
+      <p>
+        the data does not contain any real ids of clients or contents, it rather has pseudonymized client and content ids.
+      </p>
+
+      <h3>Ground-Truth Target Definition</h3>
+      <p>
+        The target variable (<code>declining_flag</code>) is a boolean flag marking pages that
+        experienced an impression drop of 10% or more from the first half to the second half of
+        the month:
+      </p>
+
+      <div class="math-wrap">
+        <div class="math-block">
+          <span class="mvar">Impression Change %</span>
+          <span>=</span>
+          <div class="frac">
+            <span class="num">Impressions<sub>second_half</sub> &minus; Impressions<sub>first_half</sub></span>
+            <span class="den">Impressions<sub>first_half</sub></span>
+          </div>
+          <span>&times; 100</span>
+        </div>
+
+        <div class="math-block">
+          <span class="mvar">declining_flag</span>
+          <span>=</span>
+          <span class="piecewise-brace">{</span>
+          <div class="piecewise-cases">
+            <div class="case-row">
+              <span class="case-val">TRUE</span>
+              <span>if Impression Change % &le; &minus;10%</span>
+            </div>
+            <div class="case-row">
+              <span class="case-val">FALSE</span>
+              <span>otherwise</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="band">
+    <div class="container">
+      <h2>Methodology</h2>
+
+      <h3>Feature Selection &amp; Decision-Moment Leakage Prevention</h3>
+      <p>
+        To model real-world decision-making conditions, all input features are strictly
+        constrained to observations collected during the first half of the month
+        (March 1&ndash;15, 2026). No second-half features or target-window telemetry are
+        accessible during feature calculation.
+      </p>
+      <ul>
+        <li><code>feat_impressions</code> &mdash; total impressions in the first half.</li>
+        <li><code>feat_clicks</code> &mdash; total clicks received in the first half.</li>
+        <li><code>feat_days_active</code> &mdash; total days in the first half with recorded impression history.</li>
+        <li><code>position_first_half</code> &mdash; average search position in the first half.</li>
+        <li><code>feat_ctr</code> &mdash; overall click-through rate in the first half.</li>
+      </ul>
+
+      <div class="math-wrap">
+        <div class="math-block">
+          <span class="mvar">feat_ctr</span>
+          <span>=</span>
+          <div class="frac">
+            <span class="num">&sum; clicks<sub>first_half</sub></span>
+            <span class="den">&sum; impressions<sub>first_half</sub></span>
+          </div>
+        </div>
+      </div>
+
+      <h3>Target Label Definition</h3>
+      <p>
+        The binary classification label <code>declining_flag</code> identifies content
+        experiencing an impression loss exceeding the 10% threshold between the first and second
+        halves of the month:
+      </p>
+
+      <div class="math-wrap">
+        <div class="math-block">
+          <span class="mvar">declining_flag</span>
+          <span>=</span>
+          <span class="piecewise-brace">{</span>
+          <div class="piecewise-cases">
+            <div class="case-row">
+              <span class="case-val">TRUE</span>
+              <span>if Impression Change % &le; &minus;10%</span>
+            </div>
+            <div class="case-row">
+              <span class="case-val">FALSE</span>
+              <span>otherwise</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <h3>Baseline Heuristic Model</h3>
+      <p>
+        To establish a minimal benchmark, a deterministic heuristic rule was implemented. The
+        heuristic prioritizes high-traffic pages experiencing significant position degradation:
+      </p>
+
+      <div class="math-wrap">
+        <div class="math-block">
+          <span class="mvar">Score<sub>baseline</sub></span>
+          <span>=</span>
+          <span class="mvar">high_volume</span>
+          <span>&times;</span>
+          <span class="mvar">position_slipped</span>
+          <span>&times;</span>
+          <span class="mvar">feat_impressions</span>
+        </div>
+      </div>
+
+      <p>Where:</p>
+      <ul>
+        <li><code>high_volume</code> = 1 if <code>feat_impressions &ge; 500</code>, else 0</li>
+        <li><code>position_slipped</code> = 1 if <code>position_second_half &minus; position_first_half &gt; 2</code>, else 0</li>
+      </ul>
+      <p>
+        This rule follows the same pattern as FlyRank's existing hand-written flags
+        (threshold-based filtering on volume and position), serving as a benchmark to assess
+        whether machine learning provides measurable predictive lift over static rules.
+      </p>
+
+      <h3>Validation Design &amp; Leakage Defense</h3>
+      <p>
+        The dataset was split into train and test sets on a client-grouped basis, meaning no
+        client's pages were present in both splits. This ensures the model cannot memorize
+        client-specific patterns to inflate its apparent precision. This risk was confirmed
+        directly: on a random (non-grouped) split, the Random Forest's Precision@50 jumped from
+        0.64 to 0.86. This precision does not indicate real world performance rather shows memorization of client related patterns. 
+        The grouped split was built using scikit-learn's <code>GroupShuffleSplit</code> at <code>test_size=0.3</code>; 
+        due to the dataset's uneven client sizes, the resulting split ratio was 91.7% / 8.3%.
+      </p>
+
+      <h3>Model Architectures</h3>
+      <p>Two interpretable tree-based classifiers were trained on the grouped training set:</p>
+      <ul>
+        <li><strong>Decision Tree Classifier:</strong> <code>max_depth=4</code>,
+          <code>class_weight='balanced'</code>, chosen to maintain decision transparency and
+          prevent tree over-expansion.</li>
+        <li><strong>Random Forest Classifier:</strong> <code>n_estimators=200</code>,
+          <code>max_depth=4</code>, <code>class_weight='balanced'</code>, chosen to ensemble weak
+          tree learners while maintaining low variance.</li>
+      </ul>
+      <p>Both models used <code>random_state=42</code> for reproducibility.</p>
+    </div>
+  </section>
+
+  <section class="band band-alt">
+    <div class="container-wide">
+      <h2>Results</h2>
+
+      <h3>Primary Evaluation Benchmark</h3>
+      <p>
+        Evaluation focuses on <strong>Precision@50</strong>, representing the top 50
+        highest-risk pages prioritized by each method. In an operational setting, 50 pages aligns
+        with a standard weekly manual review capacity for an SEO strategist or editorial team.
+        Precision@50 measures what proportion of the top 50 flagged pages actually experienced a
+        10%-or-greater impression decline in the target window.
+      </p>
+
+      <h3>Performance Comparison on Unseen Clients</h3>
+      <p>
+        All methods were evaluated on the same held-out test set under the client-grouped split
+        (11,636 rows, representing entirely unseen client domains).
+      </p>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Evaluation Method</th>
+            <th class="num">Precision@50</th>
+            <th class="num">Lift over Base Rate</th>
+            <th class="num">vs. Baseline Rule</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Base Rate (random choice)</td>
+            <td class="num">35.2%</td>
+            <td class="num">1.00&times;</td>
+            <td class="num">&mdash;</td>
+          </tr>
+          <tr>
+            <td>Baseline Rule</td>
+            <td class="num">30.0%</td>
+            <td class="num">0.85&times;</td>
+            <td class="num">1.00&times;</td>
+          </tr>
+          <tr>
+            <td>Decision Tree (max_depth=4)</td>
+            <td class="num">60.0%</td>
+            <td class="num">1.71&times;</td>
+            <td class="num">2.00&times;</td>
+          </tr>
+          <tr class="highlight-row">
+            <td>Random Forest (n_estimators=200)</td>
+            <td class="num">64.0%</td>
+            <td class="num">1.82&times;</td>
+            <td class="num">2.13&times;</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <figure>
+        <div class="fig-panel">
+          <img src="figures/split_comparison.png" alt="Bar chart comparing Precision@50 across baseline, decision tree, and random forest under client-grouped versus random splits" style="width:100%; height:auto; border-radius: 4px; display:block;">
+        </div>
+        <figcaption>
+          The gap between client-grouped and random splits is largest for Random Forest (0.64 &rarr;
+          0.86), confirming that random splitting inflates apparent performance through
+          client-specific memorization rather than genuine predictive skill.
+        </figcaption>
+      </figure>
+
+      <figure>
+        <div class="fig-panel">
+          <img src="figures/precision_at_k_curve.png" alt="Line chart showing precision at K values from 10 to 50 for the baseline rule and the random forest model, against the base rate" style="width:100%; height:auto; border-radius: 4px; display:block;">
+        </div>
+        <figcaption>
+          Random Forest's precision advantage over the baseline holds across every reviewed queue
+          depth, not just at K=50.
+        </figcaption>
+      </figure>
+
+      <h3>Key Empirical Takeaways</h3>
+      <ol>
+        <li>
+          <strong>The heuristic rule underperforms random selection.</strong> The hand-crafted
+          baseline rule (<em class="mvar">high_volume &times; position_slipped &times; impressions</em>)
+          achieved a Precision@50 of only 30.0%, performing worse than selecting pages at random
+          (35.2% base rate). Static position-drop thresholds fail because rank drops in
+          low-intent keywords or volatile search result pages often do not correspond to actual
+          impression losses.
+        </li>
+        <li>
+          <strong>Machine learning delivers a substantial lift.</strong> The Random Forest
+          classifier achieved the highest top-50 precision at 64.0%, correctly identifying
+          32 of the 50 flagged pages as genuinely declining. This is a 1.82&times; lift over the
+          base rate and a 2.13&times; improvement over the heuristic rule.
+        </li>
+        <li>
+          <strong>Even a simple, readable tree performs well.</strong> A four-level Decision Tree
+          alone delivered 60.0% precision, showing that the non-linear interaction of first-half
+          position, active-day coverage, and click-through rate carries strong predictive signal
+          even in a lightweight, fully interpretable structure.
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="band">
+    <div class="container">
+      <h2>Limitations</h2>
+      <ul>
+        <li>
+          <code>declining_flag</code> is a proxy label defined by the threshold -10% drop in
+          impressions from the first half to the second half of the month. It is not the ground
+          truth label and is not a true observed future outcome.
+        </li>
+        <li>
+          The feature set and comparisons are built entirely from one month
+          (<code>2026-03</code>) of data; results may not generalize to other months or
+          season-specific patterns.
+        </li>
+        <li>
+          Client sizes in the dataset are highly uneven (one client alone accounts for 18% of all
+          rows); GSC and GA4 tracking availability were only 36.7% and 4.2% respectively in this
+          slice.
+        </li>
+        <li>
+          Precision@50 varies meaningfully depending on the evaluation split used: 0.64 on the
+          honest, client-grouped split versus 0.86 on a random split, a gap attributable to
+          client-specific memorization under random splitting (see ML-09 validation audit).
+        </li>
+        <li>
+          Client tenure varies (clients joined FlyRank at different times), which may contribute
+          to newer pages appearing to underperform simply due to less accumulated
+          impression/click history, this hypothesis was not directly tested in this
+          analysis and should be treated as a possible confounder, not a confirmed finding.
+        </li>
+        <li>
+          This work identifies pages worth reviewing; it does not claim that refreshing them will
+          cause a recovery in performance.
+        </li>
+        <li>
+          The top of the ranked queue was dominated by a single client (disproportionate to its
+          22.7% share of the test set); the model's confidence may not generalize evenly across
+          all clients.
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="band band-alt">
+    <div class="container">
+      <h2>Ranked Recommendations</h2>
+      <p>
+        Pages are flagged for review using two evidence-based reason codes, each derived from
+        comparing the model's highest-confidence predicted-declining pages against the rest of
+        the ranked queue.
+      </p>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Reason Code</th>
+            <th>Trigger</th>
+            <th>Evidence</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="reason-code">near_zero_ctr</span></td>
+            <td><code>feat_ctr &lt; 0.001</code></td>
+            <td>Strong signal: high-confidence declining pages show a mean CTR of 0.000374,
+              roughly 14&times; lower than the rest of the queue (0.005375).</td>
+            <td>Review</td>
+          </tr>
+          <tr>
+            <td><span class="reason-code">weak_absolute_position</span></td>
+            <td><code>position_first_half &gt; 10.0</code></td>
+            <td>Soft signal: high-confidence declining pages show a median first-half
+              position of 9.06, versus 7.50 across the rest of the queue.</td>
+            <td>Review</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <p>
+        Reason codes are assigned only after a page is surfaced in the ranked queue generated from
+        the Random Forest model. Codes can co-occur on a single URL, signaling multiple compound
+        risks.
+      </p>
+
+      <figure>
+        <div class="fig-panel">
+          <img src="figures/reason_code_evidence.png" alt="Bar charts comparing average CTR and median position between high-confidence declining pages and the rest of the queue" style="width:100%; height:auto; border-radius: 4px; display:block;">
+        </div>
+        <figcaption>
+          High-confidence predictions are driven by pages with real traffic that convert almost
+          none of it into clicks, a much stronger signal than position alone.
+        </figcaption>
+      </figure>
+
+      <h3>Human Review Rules</h3>
+      <ul>
+        <li>Every flagged page requires a human to actually open and assess it the model produces a candidate list, not a verdict.</li>
+        <li>The reason codes <code>near_zero_ctr</code>, <code>weak_absolute_position</code> 
+          are hints for where to look, not diagnoses a reviewer should verify the underlying issue actually looks real before acting.</li>
+        <li>Given the client-concentration finding, a reviewer  
+          should be aware the current queue may skew toward one client and should sanity-check 
+          that pages from underrepresented clients aren't being systematically ignored.</li>
+        <li>It is important to verify the underlying split that produced the results before trusting it, 
+          Precision@50 varies meaningfully depending upon the split that the model was evaluated on.</li>
+      </ul>
+
+      <div class="callout">
+        <div class="callout-title">The No-Go List</div>
+        <ul style="margin-bottom: 0;">
+          <li>No automatic content changes, rewrites, or deletions based on the model's predictions.
+            A human reviewer must be involved.</li>
+          <li>Do not treat <code>weak_absolute_position</code> as equally strong evidence as
+            <code>near_zero_ctr</code> It is already observed that the CTR threshold shows a clear separation between groups; 
+            the position threshold is more marginal and should be treated as a softer signal.</li>
+          <li>No using this model/queue to make claims about causing a decline or guaranteeing a fix will cause recovery.</li>
+          <li>No applying this queue's logic to other months, other clients' onboarding periods, 
+            or any data outside the <code>2026-03</code> scope without re-validation.</li>
+          <li>Reviews should not be limited to a single client's pages just because that client
+            dominates the top of the ranking. Every client's inventory needs periodic review.</li>
+        </ul>
+      </div>
+
+      <h3>Monitoring &amp; Retrain Triggers</h3>
+      <ul>
+        <li>
+          <strong>Precision drift on new months.</strong> If Precision@50 on a new month's data
+          drops meaningfully below the locked baseline (0.64), retrain and re-evaluate on more
+          recent data.
+        </li>
+        <li>
+          <strong>Base rate shift.</strong> The observed decline rate in this slice was roughly
+          0.30&ndash;0.35. If a new month's natural decline rate moves substantially away from
+          this range, recompute the base rate before trusting precision numbers.
+        </li>
+        <li>
+          <strong>Client concentration recurring.</strong> If future queues continue to be
+          dominated by a single client disproportionate to its share of the data, retrain with
+          more balanced client representation or add client-level normalization.
+        </li>
+        <li>
+          <strong>Feature availability drift.</strong> GSC availability was 36.7% and GA4 only
+          4.2% in this slice. If these percentages shift substantially, re-check feature
+          availability and retrain if the composition has changed meaningfully.
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="band" id="reproducibility">
+    <div class="container">
+      <h2>Reproducibility</h2>
+      <p>
+        Every data transformation, model execution, and validation audit in this paper traces
+        directly to committed Jupyter notebooks in the project repository.
+      </p>
+
+      <ul class="notebook-list">
+        <li>
+          <span class="notebook-name">01 &middot; Lane Choice &amp; Framing</span>
+          <a href="https://github.com/mhassantahir-afk/ML-Engineering-Internship/tree/main/work/notebooks/w01_research_question.ipynb" target="_blank" rel="noopener">w01_research_question.ipynb</a>
+        </li>
+        <li>
+          <span class="notebook-name">02 &middot; ML Task &amp; Metric Definition</span>
+          <a href="https://github.com/mhassantahir-afk/ML-Engineering-Internship/tree/main/work/notebooks/w02_ml_task_framing.ipynb" target="_blank" rel="noopener">w02_ml_task_framing.ipynb</a>
+        </li>
+        <li>
+          <span class="notebook-name">03 &middot; Data Contract &amp; Feature Pipeline</span>
+          <a href="https://github.com/mhassantahir-afk/ML-Engineering-Internship/tree/main/work/notebooks/w03_data_contract.ipynb" target="_blank" rel="noopener">w03_data_contract.ipynb</a>
+        </li>
+        <li>
+          <span class="notebook-name">04 &middot; Baseline Rule &amp; Signal Audit</span>
+          <a href="https://github.com/mhassantahir-afk/ML-Engineering-Internship/tree/main/work/notebooks/w04_baseline_score.ipynb" target="_blank" rel="noopener">w04_baseline_score.ipynb</a>
+        </li>
+        <li>
+          <span class="notebook-name">05 &middot; Model Training &amp; Split Design</span>
+          <a href="https://github.com/mhassantahir-afk/ML-Engineering-Internship/tree/main/work/notebooks/w05_model.ipynb" target="_blank" rel="noopener">w05_model.ipynb</a>
+        </li>
+        <li>
+          <span class="notebook-name">06 &middot; Grouped vs. Naive Leakage Audit</span>
+          <a href="https://github.com/mhassantahir-afk/ML-Engineering-Internship/tree/main/work/notebooks/w06_validation_audit.ipynb" target="_blank" rel="noopener">w06_validation_audit.ipynb</a>
+        </li>
+        <li>
+          <span class="notebook-name">07 &middot; Action Playbook &amp; Final Visuals</span>
+          <a href="https://github.com/mhassantahir-afk/ML-Engineering-Internship/tree/main/work/notebooks/w07_action_playbook.ipynb" target="_blank" rel="noopener">w07_action_playbook.ipynb</a>
+        </li>
+      </ul>
+
+      <h3>Technical Execution Environment</h3>
+      <ul class="env-list">
+        <li><strong>Repository:</strong> <a href="https://github.com/mhassantahir-afk/ML-Engineering-Internship" target="_blank" rel="noopener">github.com/mhassantahir-afk/ML-Engineering-Internship</a></li>
+        <li><strong>Dataset Source:</strong> <code>hf://datasets/FlyRank/internship-warehouse</code> (partition <code>month=2026-03</code>)</li>
+        <li><strong>Random Seeds:</strong> all model training and splitting procedures use <code>random_state=42</code>.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="band band-alt" id="cite">
+    <div class="container">
+      <div class="cite-header">
+        <h3 style="margin-top:0;">Suggested Citation</h3>
+        <button class="copy-btn" onclick="copyCitation()">Copy</button>
+      </div>
+      <pre class="cite-block" id="cite-text">Tahir, M. H. (2026). Which Pages Need a Review First? A Data-Driven
+Priority Queue Built from Search Performance Data.
+FlyRank ML Internship — Machine-Learning Track.</pre>
+    </div>
+  </section>
+
+  <section class="band">
+    <div class="container">
+      <h2>Acknowledgments &amp; Data Credit</h2>
+      <p>
+        Built on the FlyRank ML Internship dataset, a real production search intelligence release.
+        Learn more at <a href="https://flyrank.ai" target="_blank" rel="noopener">flyrank.ai</a>.
+      </p>
+      <p>
+        Thanks to the FlyRank ML internship program for the dataset, the weekly skill guides, and
+        the structured, honesty-first framing this project follows throughout.
+      </p>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container">
+      <p>Built on the FlyRank ML Internship dataset &mdash; <a href="https://flyrank.ai" target="_blank" rel="noopener">flyrank.ai</a></p>
+    </div>
+  </footer>
+
+<script>
+  function copyCitation() {
+    const text = document.getElementById('cite-text').innerText;
+    navigator.clipboard.writeText(text).then(function() {
+      const btn = document.querySelector('.copy-btn');
+      const original = btn.textContent;
+      btn.textContent = 'Copied';
+      btn.classList.add('copied');
+      setTimeout(function() {
+        btn.textContent = original;
+        btn.classList.remove('copied');
+      }, 1600);
+    });
+  }
+</script>
+
+</body>
+</html>
